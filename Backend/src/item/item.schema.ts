@@ -9,6 +9,4 @@ export const ItemSchema = new Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   typeOfHousing: { type: String, required: false },
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
 });
