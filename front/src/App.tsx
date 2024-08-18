@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import HouseListings from './Component/HouseListings';
 import PropertyFilter from './Component/PropertyFilter';
-import 'leaflet/dist/leaflet.css';
 import MapComponent from './Component/MapComponent';
-import PublicationCard from './Component/CreatePublication'
-const App: React.FC = () => {
- 
+import VerticalIconNavbar from './Component/VerticalIconNavbar';
+import 'leaflet/dist/leaflet.css';
 
+const App: React.FC = () => {
   return (
     <div className="flex flex-row h-screen overflow-hidden">
-      <div className="w-1/3 p-4 overflow-y-auto">
-        <PropertyFilter />
+      <VerticalIconNavbar />
+      <div className="flex-1 flex">
+        <div className="w-1/3 p-4 overflow-y-auto">
+          <PropertyFilter />
+        </div>
+        <div className="w-1/3 p-4 overflow-y-auto">
+          <HouseListings />
+        </div>
+        <div className="w-1/3 p-4">
+          <MapComponent />
+        </div>
       </div>
-      <div className="w-1/3 p-4 overflow-y-auto">
-        <HouseListings  />
-      </div>
-      <div className="w-1/3 p-4">
-        <MapComponent />
-      </div>
-      <PublicationCard></PublicationCard>
     </div>
   );
 };
