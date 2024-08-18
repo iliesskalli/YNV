@@ -3,7 +3,7 @@ import HouseListings from './Component/HouseListings';
 import PropertyFilter from './Component/PropertyFilter';
 import 'leaflet/dist/leaflet.css';
 import MapComponent from './Component/MapComponent';
-
+import PublicationCard from './Component/CreatePublication'
 const App: React.FC = () => {
  
 
@@ -18,6 +18,7 @@ const App: React.FC = () => {
       <div className="w-1/3 p-4">
         <MapComponent />
       </div>
+      <PublicationCard></PublicationCard>
     </div>
   );
 };
