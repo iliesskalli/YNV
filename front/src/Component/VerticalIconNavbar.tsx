@@ -1,7 +1,10 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, DollarSign, Settings, Home, Recycle } from 'lucide-react';
 
 const VerticalIconNavbar: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="flex flex-col items-center w-16 h-screen bg-white border-r border-gray-200 py-4">
       <div className="mb-8">
@@ -23,9 +26,9 @@ const VerticalIconNavbar: React.FC = () => {
         <button className="p-2 rounded-lg hover:bg-gray-100">
           <Home className="w-6 h-6 text-gray-600" />
         </button>
-        <button className="p-2 rounded-lg hover:bg-gray-100">
+        <Link to="/recycling" className="p-2 rounded-lg hover:bg-gray-100">
           <Recycle className="w-6 h-6 text-gray-600" />
-        </button>
+        </Link>
       </div>
     </nav>
   );
