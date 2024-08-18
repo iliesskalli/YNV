@@ -1,35 +1,26 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HouseListings from './Component/HouseListings';
-import PropertyFilter from './Component/PropertyFilter';
-import MapComponent from './Component/MapComponent';
 import VerticalIconNavbar from './Component/VerticalIconNavbar';
-import RecyclingPage from './Pages/Recycling';
-import 'leaflet/dist/leaflet.css';
-
-const MainContent: React.FC = () => (
-  <div className="flex-1 flex">
-    <div className="w-1/3 p-4 overflow-y-auto">
-      <PropertyFilter />
-    </div>
-    <div className="w-1/3 p-4 overflow-y-auto">
-      <HouseListings />
-    </div>
-    <div className="w-1/3 p-4">
-      <MapComponent />
-    </div>
-  </div>
-);
+import HomePage from './Pages/HomePage';
+import PublishPropertyPage from './Pages/PublishPropertyPage';
+import SearchPage from './Pages/SearchPage';
+import MatchingProfilePage from './Pages/MatchingProfilePage';
+import SettingsPage from './Pages/SettingsPage';
 
 const App: React.FC = () => {
   return (
     <Router>
       <div className="flex flex-row h-screen overflow-hidden">
         <VerticalIconNavbar />
-        <Routes>
-          <Route path="/" element={<MainContent />} />
-          <Route path="/recycling" element={<RecyclingPage />} />
-        </Routes>
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/publish" element={<PublishPropertyPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/matching" element={<MatchingProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
