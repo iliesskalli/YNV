@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Heart, Maximize2, BedDouble, Square } from 'lucide-react';
 
 interface House {
+  _id: string; // Ajout de l'ID pour la navigation
   name: string;
   description: string;
   price: number;
@@ -17,6 +19,7 @@ interface House {
 
 const HouseListings: React.FC = () => {
   const [houses, setHouses] = useState<House[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHouses = async () => {
@@ -31,7 +34,12 @@ const HouseListings: React.FC = () => {
     fetchHouses();
   }, []);
 
+  const handleCardClick = (id: string) => {
+    navigate(`/property/${id}`);
+  };
+
   const HouseCard: React.FC<House> = ({
+    _id,
     image,
     price,
     address,
@@ -42,7 +50,10 @@ const HouseListings: React.FC = () => {
     bedrooms,
     area
   }) => (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md w-full mb-4">
+    <div 
+      className="bg-white rounded-lg overflow-hidden shadow-md w-full mb-4 cursor-pointer" 
+      onClick={() => handleCardClick(_id)}
+    >
       <div className="flex flex-col md:flex-row">
         <div className="relative md:w-2/5 lg:w-1/2 h-64 md:h-auto">
           <img
@@ -50,7 +61,13 @@ const HouseListings: React.FC = () => {
             alt={`${address}, ${city}`}
             className="w-full h-full object-cover"
           />
-          <button className="absolute top-2 right-2 bg-white rounded-full p-1">
+          <button 
+            className="absolute top-2 right-2 bg-white rounded-full p-1"
+            onClick={(e) => {
+              e.stopPropagation(); // Empêche le clic sur la carte
+              // Ajoutez ici la logique pour gérer le clic sur le cœur
+            }}
+          >
             <Heart className="h-6 w-6 text-gray-500" />
           </button>
         </div>
@@ -87,8 +104,8 @@ const HouseListings: React.FC = () => {
     <div className="p-4 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">{houses.length} Résultats à {houses[0]?.city || 'ville'}</h1>
       <div className="space-y-4">
-        {houses.map((house, index) => (
-          <HouseCard key={index} {...house} />
+        {houses.map((house) => (
+          <HouseCard key={house._id} {...house} />
         ))}
       </div>
     </div>

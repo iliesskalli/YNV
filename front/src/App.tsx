@@ -6,6 +6,7 @@ import PublishPropertyPage from './Pages/PublishPropertyPage';
 import SearchPage from './Pages/SearchPage';
 import MatchingProfilePage from './Pages/MatchingProfilePage';
 import SettingsPage from './Pages/SettingsPage';
+import PropertyDetails from './Pages/PropertyDetails';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/matching" element={<MatchingProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/property/:id" element={<PropertyDetails />} />
           </Routes>
         </div>
       </div>
