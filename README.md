@@ -115,10 +115,4 @@ Contributions are welcome! If you wish to contribute:
 
 Please follow the project's coding style and ensure that your code passes all tests before submitting a pull request.
 
-## License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
----
-
 Made with ❤️ by Achref,jk,ilies
