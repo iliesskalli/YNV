@@ -92,7 +92,7 @@ YNV/
 │   ├── package.json
 │   └── tsconfig.json
 │
-└── frontend/           # React frontend
+└── front/           # React frontend
     ├── public/
     ├── src/
     ├── .env
