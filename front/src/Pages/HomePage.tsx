@@ -5,17 +5,17 @@ import MapComponent from '../Component/MapComponent';
 
 const HomePage = () => {
   return (
-    <div className="flex-1 flex">
-    <div className="w-1/3 p-4 overflow-y-auto">
-      <PropertyFilter />
+    <div className="flex-1 flex h-screen">
+      <div className="w-1/3 p-4 overflow-y-auto">
+        <PropertyFilter />
+      </div>
+      <div className="w-1/3 p-4 overflow-y-auto">
+        <HouseListings />
+      </div>
+      <div className="w-1/3 p-4 overflow-y-auto">
+        <MapComponent />
+      </div>
     </div>
-    <div className="w-1/3 p-4 overflow-y-auto">
-      <HouseListings />
-    </div>
-    <div className="w-1/3 p-4">
-      <MapComponent />
-    </div>
-  </div>
   );
 }
 

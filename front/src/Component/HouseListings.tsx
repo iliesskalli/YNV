@@ -1,45 +1,18 @@
 import React, { useState, useEffect } from 'react';
-
-interface HouseCardProps {
-  image: string;
-  title: string;
-  price: number;
-  address: string;
-}
-
-const HouseCard: React.FC<HouseCardProps> = ({ image, title, price, address }) => (
-  <div className="bg-white rounded-lg overflow-hidden shadow-md mb-4 w-full">
-    <div className="relative">
-      <img 
-        src={`http://localhost:5000/uploads/${image}`} 
-        alt={title} 
-        className="w-full h-48 object-cover"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = '/placeholder-image.jpg';
-        }}
-      />
-    </div>
-    <div className="p-4">
-      <h2 className="text-xl font-semibold">{title}</h2>
-      <div className="flex justify-between items-center mt-2">
-        <div className="flex items-center text-gray-600">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-          </svg>
-          {address}
-        </div>
-        <span className="text-blue-600 font-bold">${price}</span>
-      </div>
-    </div>
-  </div>
-);
+import { Heart, Maximize2, BedDouble, Square } from 'lucide-react';
 
 interface House {
+  name: string;
+  description: string;
+  price: number;
   image: string;
   title: string;
-  price: number;
   address: string;
+  city: string;
+  typeOfHousing: string;
+  rooms: number;
+  bedrooms: number;
+  area: number;
 }
 
 const HouseListings: React.FC = () => {
@@ -55,22 +28,67 @@ const HouseListings: React.FC = () => {
         console.error('Error fetching house data:', error);
       }
     };
-
     fetchHouses();
   }, []);
 
+  const HouseCard: React.FC<House> = ({
+    image,
+    price,
+    address,
+    city,
+    typeOfHousing,
+    title,
+    rooms,
+    bedrooms,
+    area
+  }) => (
+    <div className="bg-white rounded-lg overflow-hidden shadow-md w-full mb-4">
+      <div className="flex flex-col md:flex-row">
+        <div className="relative md:w-2/5 lg:w-1/2 h-64 md:h-auto">
+          <img
+            src={image ? `http://localhost:5000/uploads/${image}` : "/api/placeholder/400/300"}
+            alt={`${address}, ${city}`}
+            className="w-full h-full object-cover"
+          />
+          <button className="absolute top-2 right-2 bg-white rounded-full p-1">
+            <Heart className="h-6 w-6 text-gray-500" />
+          </button>
+        </div>
+        <div className="p-4 md:w-3/5 lg:w-1/2">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+              <span className="text-sm font-semibold">{typeOfHousing || 'maison'}</span>
+            </div>
+            <span className="text-lg font-bold text-blue-600">{price.toLocaleString()} €</span>
+          </div>
+          <h2 className="text-lg font-semibold mb-2 truncate">{title}</h2>
+          <p className="text-gray-600 text-sm mb-4 truncate">{address}, {city}</p>
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center">
+              <Maximize2 className="h-5 w-5 mr-1 text-gray-500" />
+              <span className="text-sm">{area}</span>
+            </div>
+            <div className="flex items-center">
+              <BedDouble className="h-5 w-5 mr-1 text-gray-500" />
+              <span className="text-sm">{bedrooms}</span>
+            </div>
+            <div className="flex items-center">
+              <Square className="h-5 w-5 mr-1 text-gray-500" />
+              <span className="text-sm">{rooms}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">{houses.length} Results in city</h1>
+      <h1 className="text-2xl font-bold mb-4">{houses.length} Résultats à {houses[0]?.city || 'ville'}</h1>
       <div className="space-y-4">
         {houses.map((house, index) => (
-          <HouseCard 
-            key={index}
-            image={house.image}
-            title={house.title}
-            price={house.price}
-            address={house.address}
-          />
+          <HouseCard key={index} {...house} />
         ))}
       </div>
     </div>
