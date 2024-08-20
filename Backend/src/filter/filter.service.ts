@@ -19,4 +19,17 @@ export class FilterService {
 
     return this.itemModel.find(filter).exec();
   }
+
+  async filterByArea(minArea?: number, maxArea?: number): Promise<Item[]> {
+    const filter = {};
+
+    if (minArea !== undefined) {
+      filter['area'] = { $gte: minArea };
+    }
+    if (maxArea !== undefined) {
+      filter['area'] = { ...filter['area'], $lte: maxArea };
+    }
+
+    return this.itemModel.find(filter).exec();
+  }
 }

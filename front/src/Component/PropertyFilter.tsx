@@ -6,6 +6,8 @@ interface FilterCriteria {
   address: string;
   minPrice: number;
   maxPrice: number;
+  minArea: number;
+  maxArea: number;
 }
 
 interface Suggestion {
@@ -43,14 +45,18 @@ const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onAddre
   };
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
-    onFilterChange({ address: suggestion.display_name });
     onAddressSelect(suggestion.display_name, parseFloat(suggestion.lat), parseFloat(suggestion.lon));
-    setSuggestions([]);
     setShowSuggestions(false);
   };
 
-  const handlePriceChange = (value: number, isMin: boolean) => {
+  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>, isMin: boolean) => {
+    const value = parseInt(e.target.value);
     onFilterChange(isMin ? { minPrice: value } : { maxPrice: value });
+  };
+
+  const handleAreaChange = (e: ChangeEvent<HTMLInputElement>, isMin: boolean) => {
+    const value = parseInt(e.target.value);
+    onFilterChange(isMin ? { minArea: value } : { maxArea: value });
   };
 
   useEffect(() => {
@@ -91,34 +97,58 @@ const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onAddre
       </div>
 
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">Price Range</h3>
-        <div className="flex justify-between mb-2">
+        <h3 className="text-lg font-semibold mb-2">Budget</h3>
+        <div className="flex justify-between">
           <input
             type="number"
             value={filterCriteria.minPrice}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handlePriceChange(parseInt(e.target.value), true)}
-            className="w-1/3 p-2 border rounded-md"
+            onChange={(e) => handlePriceChange(e, true)}
+            className="w-1/4 p-2 border rounded-md"
             placeholder="Min"
+          />
+          <input
+            type="range"
+            min={filterCriteria.minPrice}
+            max="10000"
+            value={filterCriteria.maxPrice}
+            onChange={(e) => handlePriceChange(e, false)}
+            className="w-1/2 ml-4 mr-4"
           />
           <input
             type="number"
             value={filterCriteria.maxPrice}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handlePriceChange(parseInt(e.target.value), false)}
-            className="w-1/3 p-2 border rounded-md"
+            onChange={(e) => handlePriceChange(e, false)}
+            className="w-1/4 p-2 border rounded-md"
             placeholder="Max"
           />
         </div>
-        <input
-          type="range"
-          min="0"
-          max="10000"
-          value={filterCriteria.maxPrice}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handlePriceChange(parseInt(e.target.value), false)}
-          className="w-full"
-        />
+      </div>
+
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold mb-2">Superficie</h3>
         <div className="flex justify-between">
-          <span>${filterCriteria.minPrice}</span>
-          <span>${filterCriteria.maxPrice}</span>
+          <input
+            type="number"
+            value={filterCriteria.minArea}
+            onChange={(e) => handleAreaChange(e, true)}
+            className="w-1/4 p-2 border rounded-md"
+            placeholder="Min sq ft"
+          />
+          <input
+            type="range"
+            min={filterCriteria.minArea}
+            max="1000"
+            value={filterCriteria.maxArea}
+            onChange={(e) => handleAreaChange(e, false)}
+            className="w-1/2 ml-4 mr-4"
+          />
+          <input
+            type="number"
+            value={filterCriteria.maxArea}
+            onChange={(e) => handleAreaChange(e, false)}
+            className="w-1/4 p-2 border rounded-md"
+            placeholder="Max sq ft"
+          />
         </div>
       </div>
     </div>

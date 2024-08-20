@@ -10,7 +10,9 @@ const HomePage: React.FC = () => {
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria>({
     address: '',
     minPrice: 0,
-    maxPrice: 10000
+    maxPrice: 10000,
+    minArea: 0,
+    maxArea: 1000,
   });
   const [selectedAddress, setSelectedAddress] = useState<{ address: string; lat: number; lon: number } | undefined>();
 
@@ -41,7 +43,10 @@ const HomePage: React.FC = () => {
       const priceMatch = (typeof house.price === 'number') && 
                          house.price >= filterCriteria.minPrice && 
                          house.price <= filterCriteria.maxPrice;
-      return addressMatch && priceMatch;
+      const areaMatch = (typeof house.area === 'number') &&
+                        house.area >= filterCriteria.minArea &&
+                        house.area <= filterCriteria.maxArea;
+      return addressMatch && priceMatch && areaMatch;
     });
     console.log('Filtered houses:', filtered);
     setFilteredHouses(filtered);
