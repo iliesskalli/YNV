@@ -1,38 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Maximize2, BedDouble, Square } from 'lucide-react';
+import { House } from '../types';
 
-interface House {
-  _id: string; // Ajout de l'ID pour la navigation
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  title: string;
-  address: string;
-  city: string;
-  typeOfHousing: string;
-  rooms: number;
-  bedrooms: number;
-  area: number;
+interface HouseListingsProps {
+  houses: House[];
 }
 
-const HouseListings: React.FC = () => {
-  const [houses, setHouses] = useState<House[]>([]);
+const HouseListings: React.FC<HouseListingsProps> = ({ houses }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchHouses = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/item');
-        const data = await response.json();
-        setHouses(Array.isArray(data) ? data : [data]);
-      } catch (error) {
-        console.error('Error fetching house data:', error);
-      }
-    };
-    fetchHouses();
-  }, []);
 
   const handleCardClick = (id: string) => {
     navigate(`/property/${id}`);
@@ -64,8 +40,8 @@ const HouseListings: React.FC = () => {
           <button 
             className="absolute top-2 right-2 bg-white rounded-full p-1"
             onClick={(e) => {
-              e.stopPropagation(); // Empêche le clic sur la carte
-              // Ajoutez ici la logique pour gérer le clic sur le cœur
+              e.stopPropagation();
+              // Add logic for favoriting/liking a property here
             }}
           >
             <Heart className="h-6 w-6 text-gray-500" />
@@ -84,7 +60,7 @@ const HouseListings: React.FC = () => {
           <div className="flex items-center space-x-4 mb-4">
             <div className="flex items-center">
               <Maximize2 className="h-5 w-5 mr-1 text-gray-500" />
-              <span className="text-sm">{area}</span>
+              <span className="text-sm">{area} m²</span>
             </div>
             <div className="flex items-center">
               <BedDouble className="h-5 w-5 mr-1 text-gray-500" />
@@ -100,9 +76,14 @@ const HouseListings: React.FC = () => {
     </div>
   );
 
+  if (!Array.isArray(houses)) {
+    console.error('Houses prop is not an array:', houses);
+    return <div>No houses available</div>;
+  }
+
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">{houses.length} Résultats à {houses[0]?.city || 'ville'}</h1>
+      <h1 className="text-2xl font-bold mb-4">{houses.length} Résultats</h1>
       <div className="space-y-4">
         {houses.map((house) => (
           <HouseCard key={house._id} {...house} />
