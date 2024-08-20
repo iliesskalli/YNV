@@ -13,4 +13,12 @@ export class FilterController {
   ): Promise<Item[]> {
     return this.filterService.filterByPrice(minPrice, maxPrice);
   }
+
+  @Get('area')
+  async filterByArea(
+    @Query('minArea') minArea: number,
+    @Query('maxArea') maxArea: number,
+  ): Promise<Item[]> {
+    return this.filterService.filterByArea(minArea, maxArea);
+  }
 }
