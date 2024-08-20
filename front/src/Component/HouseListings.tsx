@@ -76,11 +76,6 @@ const HouseListings: React.FC<HouseListingsProps> = ({ houses }) => {
     </div>
   );
 
-  if (!Array.isArray(houses)) {
-    console.error('Houses prop is not an array:', houses);
-    return <div>No houses available</div>;
-  }
-
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">{houses.length} Résultats</h1>
