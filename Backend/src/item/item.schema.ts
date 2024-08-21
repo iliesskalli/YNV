@@ -8,6 +8,7 @@ export const ItemSchema = new Schema({
   title: { type: String, required: false },
   address: { type: String, required: true },
   city: { type: String, required: true },
+  country: { type: String, required: true }, // Nouveau champ
   typeOfHousing: { type: String, required: false },
   rooms: { type: Number, required: false },
   bedrooms: { type: Number, required: false },

@@ -8,6 +8,7 @@ export interface Item extends Document {
   title?: string;
   address: string;
   city: string;
+  country: string; // Nouveau champ ajouté
   typeOfHousing?: string;
   rooms?: number;
   bedrooms?: number;
