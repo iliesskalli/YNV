@@ -3,7 +3,7 @@ import { MapPin } from 'lucide-react';
 import axios from 'axios';
 
 interface FilterCriteria {
-  address: string;
+  location: string;
   minPrice: number;
   maxPrice: number;
 }
@@ -16,25 +16,38 @@ interface Suggestion {
 
 interface PropertyFilterProps {
   onFilterChange: (criteria: Partial<FilterCriteria>) => void;
-  onAddressSelect: (address: string, lat: number, lon: number) => void;
+  onLocationSelect: (location: string, lat: number, lon: number) => void;
   filterCriteria: FilterCriteria;
 }
 
-const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onAddressSelect, filterCriteria }) => {
+const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onLocationSelect, filterCriteria }) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const handleAddressChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLocationChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    onFilterChange({ address: value });
+    onFilterChange({ location: value });
 
     if (value.length > 2) {
       try {
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(value)}`);
-        setSuggestions(response.data);
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+          params: {
+            q: value,
+            format: 'json',
+            addressdetails: 1,
+            limit: 5,
+            featuretype: 'city|village|suburb|postcode'
+          }
+        });
+        const formattedSuggestions = response.data.map((item: any) => ({
+          display_name: item.address.city || item.address.town || item.address.village || item.address.suburb || item.address.postcode || item.display_name,
+          lat: item.lat,
+          lon: item.lon
+        }));
+        setSuggestions(formattedSuggestions);
         setShowSuggestions(true);
       } catch (error) {
-        console.error('Error fetching address suggestions:', error);
+        console.error('Error fetching location suggestions:', error);
       }
     } else {
       setSuggestions([]);
@@ -43,8 +56,8 @@ const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onAddre
   };
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
-    onFilterChange({ address: suggestion.display_name });
-    onAddressSelect(suggestion.display_name, parseFloat(suggestion.lat), parseFloat(suggestion.lon));
+    onFilterChange({ location: suggestion.display_name });
+    onLocationSelect(suggestion.display_name, parseFloat(suggestion.lat), parseFloat(suggestion.lon));
     setSuggestions([]);
     setShowSuggestions(false);
   };
@@ -64,14 +77,14 @@ const PropertyFilter: React.FC<PropertyFilterProps> = ({ onFilterChange, onAddre
       <h2 className="text-2xl font-bold mb-4">Filter</h2>
       
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">Address</h3>
+        <h3 className="text-lg font-semibold mb-2">Location</h3>
         <div className="relative">
           <input
             type="text"
-            value={filterCriteria.address}
-            onChange={handleAddressChange}
+            value={filterCriteria.location}
+            onChange={handleLocationChange}
             className="w-full p-2 border rounded-md appearance-none bg-white"
-            placeholder="Enter address or city"
+            placeholder="Enter city, neighborhood, or postal code"
           />
           <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           {showSuggestions && suggestions.length > 0 && (

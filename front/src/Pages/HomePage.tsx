@@ -8,11 +8,11 @@ const HomePage: React.FC = () => {
   const [houses, setHouses] = useState<House[]>([]);
   const [filteredHouses, setFilteredHouses] = useState<House[]>([]);
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria>({
-    address: '',
+    location: '',  // Changed from 'address' to 'location'
     minPrice: 0,
     maxPrice: 10000
   });
-  const [selectedAddress, setSelectedAddress] = useState<{ address: string; lat: number; lon: number } | undefined>();
+  const [selectedLocation, setSelectedLocation] = useState<{ location: string; lat: number; lon: number } | undefined>();
 
   useEffect(() => {
     fetchHouses();
@@ -36,12 +36,12 @@ const HomePage: React.FC = () => {
 
   const applyFilters = () => {
     const filtered = houses.filter(house => {
-      const addressMatch = (house.address?.toLowerCase().includes(filterCriteria.address.toLowerCase()) ?? false) ||
-                           (house.city?.toLowerCase().includes(filterCriteria.address.toLowerCase()) ?? false);
+      const locationMatch = (house.address?.toLowerCase().includes(filterCriteria.location.toLowerCase()) ?? false) ||
+                           (house.city?.toLowerCase().includes(filterCriteria.location.toLowerCase()) ?? false);
       const priceMatch = (typeof house.price === 'number') && 
                          house.price >= filterCriteria.minPrice && 
                          house.price <= filterCriteria.maxPrice;
-      return addressMatch && priceMatch;
+      return locationMatch && priceMatch;
     });
     console.log('Filtered houses:', filtered);
     setFilteredHouses(filtered);
@@ -51,8 +51,8 @@ const HomePage: React.FC = () => {
     setFilterCriteria(prev => ({ ...prev, ...newCriteria }));
   };
 
-  const handleAddressSelect = (address: string, lat: number, lon: number) => {
-    setSelectedAddress({ address, lat, lon });
+  const handleLocationSelect = (location: string, lat: number, lon: number) => {
+    setSelectedLocation({ location, lat, lon });
   };
 
   return (
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
       <div className="w-1/3 p-4 overflow-y-auto">
         <PropertyFilter 
           onFilterChange={handleFilterChange} 
-          onAddressSelect={handleAddressSelect}
+          onLocationSelect={handleLocationSelect}
           filterCriteria={filterCriteria} 
         />
       </div>
@@ -68,7 +68,7 @@ const HomePage: React.FC = () => {
         <HouseListings houses={filteredHouses} />
       </div>
       <div className="w-1/3 p-4 overflow-y-auto">
-        <MapComponent houses={filteredHouses} selectedAddress={selectedAddress} />
+        <MapComponent houses={filteredHouses} selectedLocation={selectedLocation} />
       </div>
     </div>
   );
